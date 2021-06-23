@@ -2,17 +2,17 @@
 - hosts: vyos
   gather_facts: false
   tasks:
-  # - name: show conf
-  #   vyos_command:
-  #     commands:
-  #       - show configuration command
-  #   register: result
+  - name: show conf before
+    vyos_command:
+      commands:
+        - show configuration command
+    register: result
   
-  # - name: debug config
-  #   debug:
-  #     msg: "{{ result.stdout_lines[0] }}"
+  - name: debug config
+    debug:
+      msg: "{{ result.stdout_lines[0] }}"
 
-  - name: set conf {{inventory_hostname}}
+  - name: set conf vyos01
     vyos_config:
       lines: 
         - set interfaces ethernet eth0 address 10.0.0.3/24
@@ -24,7 +24,7 @@
       save: yes
     when: inventory_hostname == "vyos01"
 
-  - name: set conf {{ inventory_hostname }}
+  - name: set conf vyos02
     vyos_config:
       lines: 
         - set interfaces ethernet eth0 address 10.0.0.4/24
@@ -36,7 +36,7 @@
       save: yes
     when: inventory_hostname == "vyos02"
 
-  - name: show conf
+  - name: show conf after
     vyos_command:
       commands:
         - show configuration command
