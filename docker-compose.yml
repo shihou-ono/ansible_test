@@ -23,4 +23,10 @@ services:
     networks:
       mgmt_nw:
         ipv4_address: 10.0.0.4
-      
+
+networks:
+  mgmt_nw:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/24
