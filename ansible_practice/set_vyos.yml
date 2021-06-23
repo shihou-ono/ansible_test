@@ -15,30 +15,24 @@
   - name: set conf {{inventory_hostname}}
     vyos_config:
       lines: 
-        - set interfaces ethernet eth1 address 172.31.1.254/24
-        - set interfaces ethernet eth1 vrrp vrrp-group 1 virtual-address 172.31.1.252/24
-        - set interfaces ethernet eth1 vrrp vrrp-group 1 priority 150
-        - set interfaces ethernet eth1 vrrp vrrp-group 1 preempt true
-        - set interfaces ethernet eth1 vrrp vrrp-group 1 sync-group syncgrp01
-        - set interfaces ethernet eth2 address 172.31.2.254/24
-        - set interfaces ethernet eth2 vrrp vrrp-group 2 virtual-address 172.31.2.252/24
-        - set interfaces ethernet eth2 vrrp vrrp-group 2 priority 150
-        - set interfaces ethernet eth2 vrrp vrrp-group 2 sync-group syncgrp01
-        - set interfaces ethernet eth2 vrrp vrrp-group 2 preempt true
+        - set interfaces ethernet eth0 address 10.0.0.3/24
+        - set interfaces ethernet eth1 address 172.31.1.3/24
+        - set interfaces ethernet eth2 address 172.31.2.3/24
+        - set interfaces loopback lo address 1.1.1.1/32
+        - set protocols static route 2.2.2.2/32 next-hop 172.31.1.4 distance '10'
+        - set protocols static route 2.2.2.2/32 next-hop 172.31.2.4 distance '15'
       save: yes
     when: inventory_hostname == "vyos01"
 
   - name: set conf {{ inventory_hostname }}
     vyos_config:
       lines: 
-        - set interfaces ethernet eth1 address 172.31.1.253/24
-        - set interfaces ethernet eth1 vrrp vrrp-group 1 virtual-address 172.31.1.252/24
-        - set interfaces ethernet eth1 vrrp vrrp-group 1 priority 100
-        - set interfaces ethernet eth1 vrrp vrrp-group 1 sync-group syncgrp01
-        - set interfaces ethernet eth2 address 172.31.2.253/24
-        - set interfaces ethernet eth2 vrrp vrrp-group 2 virtual-address 172.31.2.252/24
-        - set interfaces ethernet eth2 vrrp vrrp-group 2 priority 100
-        - set interfaces ethernet eth2 vrrp vrrp-group 2 sync-group syncgrp01
+        - set interfaces ethernet eth0 address 10.0.0.4/24
+        - set interfaces ethernet eth1 address 172.31.1.4/24
+        - set interfaces ethernet eth2 address 172.31.2.4/24
+        - set interfaces loopback lo address 2.2.2.2/32
+        - set protocols static route 1.1.1.1/32 next-hop 172.31.1.3 distance '10'
+        - set protocols static route 1.1.1.1/32 next-hop 172.31.2.3 distance '15'
       save: yes
     when: inventory_hostname == "vyos02"
 
