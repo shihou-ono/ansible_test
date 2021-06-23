@@ -26,6 +26,7 @@ services:
 
 networks:
   mgmt_nw:
+    name: mgmt_nw
     ipam:
       driver: default
       config:
