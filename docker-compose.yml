@@ -1,0 +1,75 @@
+version: '3'
+services:
+  vyos01:
+    hostname: vyos01
+    container_name: vyos01
+    image: 2stacks/vyos:latest
+    command: /sbin/init
+    volumes:
+    - /lib/modules:/lib/modules
+    privileged: true
+    networks:
+      mgmt_nw:
+        ipv4_address: 10.0.0.3
+
+  vyos02:
+    hostname: vyos02
+    container_name: vyos02
+    image: 2stacks/vyos:latest
+    command: /sbin/init
+    volumes:
+    - /lib/modules:/lib/modules
+    privileged: true
+    networks:
+      mgmt_nw:
+        ipv4_address: 10.0.0.4
+      
+  server:
+    hostname: server
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile_centos
+    privileged: true
+    command: /sbin/init
+    networks:
+      mgmt_nw:
+        ipv4_address: 10.0.0.5
+      server_nw:
+        ipv4_address: 172.31.2.2
+        
+  client:
+    hostname: client
+    container_name: client
+    build:
+      context: .
+      dockerfile: Dockerfile_centos
+    privileged: true
+    command: /sbin/init
+    networks:
+      mgmt_nw:
+        ipv4_address: 10.0.0.6
+      client_nw:
+        ipv4_address: 172.31.1.2
+
+networks:
+  mgmt_nw:
+    name: mgmt_nw
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/24
+  
+  client_nw:
+    name: client_nw
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.31.1.0/24
+
+  server_nw:
+    name: server_nw
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.31.2.0/24

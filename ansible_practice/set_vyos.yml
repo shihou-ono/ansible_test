@@ -1,0 +1,53 @@
+---
+- hosts: vyos
+  gather_facts: false
+  tasks:
+  # - name: show conf
+  #   vyos_command:
+  #     commands:
+  #       - show configuration command
+  #   register: result
+  
+  # - name: debug config
+  #   debug:
+  #     msg: "{{ result.stdout_lines[0] }}"
+
+  - name: set conf {{inventory_hostname}}
+    vyos_config:
+      lines: 
+        - set interfaces ethernet eth1 address 172.31.1.254/24
+        - set interfaces ethernet eth1 vrrp vrrp-group 1 virtual-address 172.31.1.252/24
+        - set interfaces ethernet eth1 vrrp vrrp-group 1 priority 150
+        - set interfaces ethernet eth1 vrrp vrrp-group 1 preempt true
+        - set interfaces ethernet eth1 vrrp vrrp-group 1 sync-group syncgrp01
+        - set interfaces ethernet eth2 address 172.31.2.254/24
+        - set interfaces ethernet eth2 vrrp vrrp-group 2 virtual-address 172.31.2.252/24
+        - set interfaces ethernet eth2 vrrp vrrp-group 2 priority 150
+        - set interfaces ethernet eth2 vrrp vrrp-group 2 sync-group syncgrp01
+        - set interfaces ethernet eth2 vrrp vrrp-group 2 preempt true
+      save: yes
+    when: inventory_hostname == "vyos01"
+
+  - name: set conf {{ inventory_hostname }}
+    vyos_config:
+      lines: 
+        - set interfaces ethernet eth1 address 172.31.1.253/24
+        - set interfaces ethernet eth1 vrrp vrrp-group 1 virtual-address 172.31.1.252/24
+        - set interfaces ethernet eth1 vrrp vrrp-group 1 priority 100
+        - set interfaces ethernet eth1 vrrp vrrp-group 1 sync-group syncgrp01
+        - set interfaces ethernet eth2 address 172.31.2.253/24
+        - set interfaces ethernet eth2 vrrp vrrp-group 2 virtual-address 172.31.2.252/24
+        - set interfaces ethernet eth2 vrrp vrrp-group 2 priority 100
+        - set interfaces ethernet eth2 vrrp vrrp-group 2 sync-group syncgrp01
+      save: yes
+    when: inventory_hostname == "vyos02"
+
+  - name: show conf
+    vyos_command:
+      commands:
+        - show configuration command
+    register: result
+  
+  - name: debug config
+    debug:
+      msg: "{{ result.stdout_lines[0] }}"

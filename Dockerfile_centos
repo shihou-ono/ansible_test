@@ -1,0 +1,18 @@
+FROM centos:centos7
+
+RUN yum -y update && yum -y install \
+    epel-release \
+    iproute \
+    openssh-server \
+    NetworkManager
+
+RUN sed -ri 's/^#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+RUN echo 'root:rootpass' | chpasswd
+
+RUN ssh-keygen -t rsa -N "" -f /etc/ssh/ssh_host_rsa_key
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
+
