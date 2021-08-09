@@ -3,7 +3,7 @@ services:
   vyos01:
     hostname: vyos01
     container_name: vyos01
-    image: 2stacks/vyos:latest
+    image: shihou/vyos:1.4
     command: /sbin/init
     volumes:
     - /lib/modules:/lib/modules
@@ -15,7 +15,7 @@ services:
   vyos02:
     hostname: vyos02
     container_name: vyos02
-    image: 2stacks/vyos:latest
+    image: shihou/vyos:1.4
     command: /sbin/init
     volumes:
     - /lib/modules:/lib/modules
